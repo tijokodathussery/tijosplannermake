@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tijo's Planner — Personal Real-time Expense Tracker</title>
+  <title>Tijo's Planner — Personal Expense Tracker</title>
   <meta name="description" content="Tijo's Planner — A premium, minimalist personal expense tracker. Manage your budget, visualize spending with real-time charts, and export to CSV.">
   
   <!-- Google Fonts -->
@@ -23,247 +23,214 @@
 <body>
 
   <!-- ═══════════════════════════════════════════════════════════════════
-       AUTHENTICATION / LANDING SCREEN
+       HEADER
        ═══════════════════════════════════════════════════════════════════ -->
-  <div id="authScreen" class="auth-screen">
-    <div class="auth-card">
-      <div class="auth-logo">
+  <header class="app-header">
+    <div class="header-container">
+      <div class="app-logo">
         <span class="logo-icon">✦</span>
-        <h1 class="logo-text">Tijo's Planner</h1>
+        <h1 class="logo-text" id="logoText" contenteditable="true" spellcheck="false" title="Click to rename your planner">Tijo's Planner</h1>
+        <button id="editAppNameBtn" class="btn-icon btn-icon-sm edit-logo-btn" aria-label="Rename planner" title="Rename planner">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
       </div>
-      <p class="auth-subtitle">A premium, minimalist expense tracker to manage your personal budget and visualize spending in real-time across all your devices.</p>
-      <button id="googleSignInBtn" class="btn btn-google btn-block">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
-          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-          <path fill="#4285F4" d="M46.5 24c0-1.61-.15-3.16-.42-4.69H24v8.89h12.65c-.55 2.94-2.21 5.43-4.7 7.1l7.31 5.67C43.5 36.19 46.5 30.68 46.5 24z"/>
-          <path fill="#FBBC05" d="M10.54 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.98-6.19z"/>
-          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.3-5.67c-2.03 1.36-4.63 2.18-8.59 2.18-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-        </svg>
-        <span>Sign in with Google</span>
-      </button>
+      <div class="header-actions">
+        <!-- Currency Selector -->
+        <div class="currency-select-wrapper">
+          <select id="currencySelector" aria-label="Select currency">
+            <option value="INR" data-symbol="₹" selected>INR (₹)</option>
+            <option value="USD" data-symbol="$">USD ($)</option>
+            <option value="EUR" data-symbol="€">EUR (€)</option>
+            <option value="GBP" data-symbol="£">GBP (£)</option>
+            <option value="JPY" data-symbol="¥">JPY (¥)</option>
+            <option value="CAD" data-symbol="$">CAD ($)</option>
+            <option value="AUD" data-symbol="$">AUD ($)</option>
+          </select>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="btn-icon" aria-label="Toggle theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
     </div>
-  </div>
+  </header>
 
   <!-- ═══════════════════════════════════════════════════════════════════
-       MAIN APPLICATION SCREEN (Gated by Auth)
+       MAIN CONTENT
        ═══════════════════════════════════════════════════════════════════ -->
-  <div id="appScreen" class="app-screen" style="display: none;">
-    <!-- HEADER -->
-    <header class="app-header">
-      <div class="header-container">
-        <div class="app-logo">
-          <span class="logo-icon">✦</span>
-          <h1 class="logo-text" id="logoText" contenteditable="true" spellcheck="false" title="Click to rename your planner">Tijo's Planner</h1>
-          <button id="editAppNameBtn" class="btn-icon btn-icon-sm edit-logo-btn" aria-label="Rename planner" title="Rename planner">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </button>
+  <main class="app-container">
+
+    <!-- Stats Dashboard -->
+    <section class="stats-dashboard" aria-label="Expense statistics">
+      <div class="stats-card">
+        <div class="stats-icon accent-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         </div>
-        <div class="header-actions">
-          <!-- Currency Selector -->
-          <div class="currency-select-wrapper">
-            <select id="currencySelector" aria-label="Select currency">
-              <option value="INR" data-symbol="₹" selected>INR (₹)</option>
-              <option value="USD" data-symbol="$">USD ($)</option>
-              <option value="EUR" data-symbol="€">EUR (€)</option>
-              <option value="GBP" data-symbol="£">GBP (£)</option>
-              <option value="JPY" data-symbol="¥">JPY (¥)</option>
-              <option value="CAD" data-symbol="$">CAD ($)</option>
-              <option value="AUD" data-symbol="$">AUD ($)</option>
-            </select>
+        <div class="stats-info">
+          <span class="stats-label">Total Expenses</span>
+          <span class="stats-value" id="statTotal">₹0.00</span>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-icon accent-success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div class="stats-info">
+          <span class="stats-label">Daily Average</span>
+          <span class="stats-value" id="statAverage">₹0.00</span>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-icon accent-warning">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        </div>
+        <div class="stats-info">
+          <span class="stats-label">Top Category</span>
+          <span class="stats-value stats-value--text" id="statTopCategory">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two-Column Workspace -->
+    <div class="workspace-grid">
+
+      <!-- LEFT: Expense Form -->
+      <section class="card form-card">
+        <h2 class="card-title">
+          <span id="formCardTitle">Add Transaction</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </h2>
+        <form id="expenseForm" class="expense-form" novalidate>
+          <!-- Date -->
+          <div class="form-group">
+            <label class="form-label" for="expenseDate">Date</label>
+            <div class="input-wrapper">
+              <input type="date" id="expenseDate" required>
+            </div>
+            <span class="error-msg" id="errorDate">Please select a valid date.</span>
           </div>
-          <!-- Theme Toggle -->
-          <button id="themeToggle" class="btn-icon" aria-label="Toggle theme">
-            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          </button>
-          <!-- User Profile & Log Out -->
-          <div class="user-profile">
-            <img id="userAvatar" class="user-avatar" src="" alt="" style="display: none;">
-            <button id="signOutBtn" class="btn btn-secondary btn-sm" title="Sign Out">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              <span>Sign Out</span>
+          <!-- Amount -->
+          <div class="form-group">
+            <label class="form-label" for="expenseAmount">Amount (<span id="amountCurrencySymbol">₹</span>)</label>
+            <div class="input-wrapper">
+              <input type="number" id="expenseAmount" placeholder="0.00" min="0.01" step="0.01" required>
+            </div>
+            <span class="error-msg" id="errorAmount">Amount must be greater than zero.</span>
+          </div>
+          <!-- Category -->
+          <div class="form-group">
+            <label class="form-label" for="expenseCategory">Category</label>
+            <div class="input-wrapper select-wrapper">
+              <select id="expenseCategory" required>
+                <option value="" disabled selected>Select Category</option>
+              </select>
+            </div>
+            <span class="error-msg" id="errorCategory">Please select a category.</span>
+          </div>
+          <!-- Payment Mode -->
+          <div class="form-group">
+            <label class="form-label" for="expensePaymentMode">Payment Mode</label>
+            <div class="input-wrapper select-wrapper">
+              <select id="expensePaymentMode" required>
+                <option value="" disabled selected>Select Payment Mode</option>
+              </select>
+            </div>
+            <span class="error-msg" id="errorPaymentMode">Please select a payment mode.</span>
+          </div>
+          <!-- Remarks -->
+          <div class="form-group">
+            <label class="form-label" for="expenseRemarks">Remarks <span class="label-optional">(Optional)</span></label>
+            <div class="input-wrapper">
+              <input type="text" id="expenseRemarks" placeholder="Add a note...">
+            </div>
+          </div>
+          <!-- Submit & Actions -->
+          <div class="form-actions-grid" id="formActionsGrid">
+            <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span id="submitBtnText">Log Transaction</span>
+            </button>
+            <button type="button" id="cancelEditBtn" class="btn btn-secondary btn-block" style="display: none;">
+              Cancel
             </button>
           </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- MAIN CONTENT -->
-    <main class="app-container">
-
-      <!-- Stats Dashboard -->
-      <section class="stats-dashboard" aria-label="Expense statistics">
-        <div class="stats-card">
-          <div class="stats-icon accent-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-          </div>
-          <div class="stats-info">
-            <span class="stats-label">Total Expenses</span>
-            <span class="stats-value" id="statTotal">₹0.00</span>
-          </div>
-        </div>
-        <div class="stats-card">
-          <div class="stats-icon accent-success">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-          </div>
-          <div class="stats-info">
-            <span class="stats-label">Daily Average</span>
-            <span class="stats-value" id="statAverage">₹0.00</span>
-          </div>
-        </div>
-        <div class="stats-card">
-          <div class="stats-icon accent-warning">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          </div>
-          <div class="stats-info">
-            <span class="stats-label">Top Category</span>
-            <span class="stats-value stats-value--text" id="statTopCategory">—</span>
-          </div>
-        </div>
+        </form>
       </section>
 
-      <!-- Two-Column Workspace -->
-      <div class="workspace-grid">
+      <!-- RIGHT: Chart + List -->
+      <div class="visualization-column">
 
-        <!-- LEFT: Expense Form -->
-        <section class="card form-card">
-          <h2 class="card-title">
-            <span id="formCardTitle">Add Transaction</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.4"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </h2>
-          <form id="expenseForm" class="expense-form" novalidate>
-            <!-- Date -->
-            <div class="form-group">
-              <label class="form-label" for="expenseDate">Date</label>
-              <div class="input-wrapper">
-                <input type="date" id="expenseDate" required>
-              </div>
-              <span class="error-msg" id="errorDate">Please select a valid date.</span>
+        <!-- Pie Chart -->
+        <section class="card chart-card">
+          <h2 class="card-title">Category Distribution</h2>
+          <div class="chart-container">
+            <canvas id="expenseChart"></canvas>
+            <div class="chart-empty-state" id="chartEmptyMessage">
+              <span class="empty-icon">📊</span>
+              <p>No transactions logged yet. Add an expense to view distribution.</p>
             </div>
-            <!-- Amount -->
-            <div class="form-group">
-              <label class="form-label" for="expenseAmount">Amount (<span id="amountCurrencySymbol">₹</span>)</label>
-              <div class="input-wrapper">
-                <input type="number" id="expenseAmount" placeholder="0.00" min="0.01" step="0.01" required>
-              </div>
-              <span class="error-msg" id="errorAmount">Amount must be greater than zero.</span>
-            </div>
-            <!-- Category -->
-            <div class="form-group">
-              <label class="form-label" for="expenseCategory">Category</label>
-              <div class="input-wrapper select-wrapper">
-                <select id="expenseCategory" required>
-                  <option value="" disabled selected>Select Category</option>
-                </select>
-              </div>
-              <span class="error-msg" id="errorCategory">Please select a category.</span>
-            </div>
-            <!-- Payment Mode -->
-            <div class="form-group">
-              <label class="form-label" for="expensePaymentMode">Payment Mode</label>
-              <div class="input-wrapper select-wrapper">
-                <select id="expensePaymentMode" required>
-                  <option value="" disabled selected>Select Payment Mode</option>
-                </select>
-              </div>
-              <span class="error-msg" id="errorPaymentMode">Please select a payment mode.</span>
-            </div>
-            <!-- Remarks -->
-            <div class="form-group">
-              <label class="form-label" for="expenseRemarks">Remarks <span class="label-optional">(Optional)</span></label>
-              <div class="input-wrapper">
-                <input type="text" id="expenseRemarks" placeholder="Add a note...">
-              </div>
-            </div>
-            <!-- Submit & Actions -->
-            <div class="form-actions-grid" id="formActionsGrid">
-              <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                <span id="submitBtnText">Log Transaction</span>
-              </button>
-              <button type="button" id="cancelEditBtn" class="btn btn-secondary btn-block" style="display: none;">
-                Cancel
-              </button>
-            </div>
-          </form>
+          </div>
+          <!-- Chart Legend -->
+          <div class="chart-legend" id="chartLegend"></div>
         </section>
 
-        <!-- RIGHT: Chart + List -->
-        <div class="visualization-column">
-
-          <!-- Month/Year Scrollable Tabs -->
-          <div class="card month-tabs-card">
-            <h2 class="card-title-sm">Select Month</h2>
-            <div class="month-tabs" id="monthTabsContainer">
-              <!-- Dynamically populated month tabs -->
+        <!-- Recent Transactions -->
+        <section class="card list-card">
+          <div class="list-header">
+            <h2 class="card-title">Recent Transactions</h2>
+            <div class="list-actions">
+              <!-- Import CSV -->
+              <input type="file" id="importCsvInput" accept=".csv" hidden>
+              <button id="importCsvBtn" class="btn btn-secondary btn-sm" title="Import from CSV">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Import
+              </button>
+              <!-- Export CSV -->
+              <button id="exportCsvBtn" class="btn btn-primary btn-sm" title="Export to CSV">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Export CSV
+              </button>
             </div>
           </div>
 
-          <!-- Pie Chart -->
-          <section class="card chart-card">
-            <h2 class="card-title">Category Distribution</h2>
-            <div class="chart-container">
-              <canvas id="expenseChart"></canvas>
-              <div class="chart-empty-state" id="chartEmptyMessage">
-                <span class="empty-icon">📊</span>
-                <p>No transactions logged yet. Add an expense to view distribution.</p>
-              </div>
+          <!-- Filters -->
+          <div class="list-filters">
+            <div class="input-wrapper search-box">
+              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="searchInput" placeholder="Search transactions...">
             </div>
-            <!-- Chart Legend -->
-            <div class="chart-legend" id="chartLegend"></div>
-          </section>
+            <div class="input-wrapper select-wrapper">
+              <select id="categoryFilter">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+          </div>
 
-          <!-- Recent Transactions -->
-          <section class="card list-card">
-            <div class="list-header">
-              <h2 class="card-title">Transactions</h2>
-              <div class="list-actions">
-                <!-- Export CSV -->
-                <button id="exportCsvBtn" class="btn btn-primary btn-sm" title="Export to CSV">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  <span>Export CSV</span>
-                </button>
-              </div>
-            </div>
+          <!-- Entries Table -->
+          <div class="entries-wrapper">
+            <table class="entries-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Details</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="entriesBody"></tbody>
+            </table>
+          </div>
 
-            <!-- Filters & Search -->
-            <div class="list-filters">
-              <div class="input-wrapper search-box">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="searchInput" placeholder="Search transactions...">
-              </div>
-              <div class="input-wrapper select-wrapper">
-                <select id="categoryFilter">
-                  <option value="">All Categories</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Entries Table -->
-            <div class="entries-wrapper">
-              <table class="entries-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Details</th>
-                    <th class="text-right">Amount</th>
-                    <th class="text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody id="entriesBody"></tbody>
-              </table>
-            </div>
-
-            <!-- Empty State -->
-            <div class="table-empty-state" id="tableEmptyState">
-              <span class="empty-icon">💸</span>
-              <p>No transactions found matching your filters.</p>
-            </div>
-          </section>
-        </div>
+          <!-- Empty State -->
+          <div class="table-empty-state" id="tableEmptyState">
+            <span class="empty-icon">💸</span>
+            <p>No transactions found matching your filters.</p>
+          </div>
+        </section>
       </div>
-    </main>
-  </div>
+    </div>
+  </main>
 
   <!-- ═══════════════════════════════════════════════════════════════════
        MODAL: Add New Category / Payment Mode
@@ -301,6 +268,6 @@
   </div>
 
   <!-- App Script -->
-  <script type="module" src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
